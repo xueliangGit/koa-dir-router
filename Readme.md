@@ -57,7 +57,7 @@ $ GET /mis/type
 show-ok
 ```
 
-![showOK.png](./showOK.png)
+![showOK.png](https://raw.githubusercontent.com/xueliangGit/koa-dir-router/master/showOk.png)
 
 如果需要一个基础的地址 `baseUrl`
 
@@ -86,7 +86,7 @@ $ GET /mis/mis/type
 show-ok
 ```
 
-![showOK2.png](./showOK2.png)
+![showOK2.png](https://raw.githubusercontent.com/xueliangGit/koa-dir-router/master/showOk2.png)
 
 # License
 

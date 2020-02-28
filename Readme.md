@@ -1,6 +1,6 @@
 # koa-dir-router
 
-一个 koa 的中间件，支持以文件夹目录为网址的访问形式，且不用重启 koa 服务，即可热更新文件夹内部的文件代码，修改即上线。在开发接口时方便修改代码，和无感上线。
+A middleware of KOA supports the access form with folder directory as the URL, and does not need to restart koa service. It can update the file code of the folder inside the folder and modify it. It is convenient to modify the code and go online without feeling when developing the interface.
 
 ## Installation
 
@@ -10,15 +10,16 @@ $ npm install koa-dir-router
 
 ## Options
 
-- `dir` 一个储存代码的文件目录的绝对路径，必须传递
-- `baseUrl` 请求的基准 url,默认是'/'
-- `checkTimes` 检测文件改动的时间，单位是 ms；默认是 1
-- `errorLog` 文件目录下的文件代码执行异常时的捕获的代码方法；接受到值是`{path,des,error}`
+- `dir` The absolute path to the directory where the code is stored, must
+- `baseUrl` The reference URL of the request. The default is' / '
+- `checkTimes` Time to detect file changes, in MS; default is 1
+- `errorLog` Code method caught when the file code under the file directory executes an exception; the received value is `{path, DES, error}`
 
 ## Example
 
-在启动程序同级目录下开始
-目录结构
+Start in the same level directory of the startup program
+
+directory structure
 
 ```
 ·
@@ -41,13 +42,13 @@ var app = new Koa()
 
 app.use(
   dirRouter({
-    dir: path.join(__dirname, './controller') // 传入要访问的目录机构
+    dir: path.join(__dirname, './controller') // Incoming directory structure to access
   })
 )
 app.listen(3000)
 ```
 
-访问 http://localhost:3000/mis/type 时会对应到对应的 文件目录下的 `./controller/mis/type.js`这个文件代码
+When accessing http://localhost:3000/mis/type, it will correspond to the file code of `./controller/MIS/type.JS` under the corresponding file directory
 
 yields:
 
@@ -59,7 +60,7 @@ show-ok
 
 ![showOK.png](https://raw.githubusercontent.com/xueliangGit/koa-dir-router/master/showOk.png)
 
-如果需要一个基础的地址 `baseUrl`
+If you need a base address `baseUrl`
 
 ```js
 // ./index.js
@@ -70,14 +71,14 @@ var app = new Koa()
 
 app.use(
   dirRouter({
-    dir: path.join(__dirname, './controller'), // 传入要访问的目录机构
-    baseUrl: '/mis' // 基础地址
+    dir: path.join(__dirname, './controller'), // Incoming directory structure to access
+    baseUrl: '/mis' // base address
   })
 )
 app.listen(3000)
 ```
 
-访问 http://localhost:3000/mis/mis/type 时会对应到对应的 文件目录下的 `./controller/mis/type.js`这个文件代码
+When accessing http://localhost:3000/mis/mis/type, it will correspond to the file code of `./controller/MIS/type.JS` under the corresponding file directory
 yields:
 
 ```js

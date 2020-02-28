@@ -23,7 +23,7 @@ $ npm install koa-dir-router
 ```
 ·
 ├──index.js
-├──controlelr
+├──controller
    ├──mis
       ├──type.js
 ```

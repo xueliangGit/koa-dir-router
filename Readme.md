@@ -1,6 +1,6 @@
 # koa-dir-router
 
-[中文文档](https://xuelianggit.github.io/koa-dir-router/Readme_cn)
+[中文文档](http://koadirrouter.yamjs.cn/Readme_cn)
 
 A middleware of KOA supports the access form with folder directory as the URL, and does not need to restart koa service. It can update the file code of the folder inside the folder and modify it. It is convenient to modify the code and go online without feeling when developing the interface.
 

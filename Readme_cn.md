@@ -1,6 +1,6 @@
 # koa-dir-router
 
-[english](https://xuelianggit.github.io/koa-dir-router)
+[english](http://koadirrouter.yamjs.cn)
 
 一个 koa 的中间件，支持以文件夹目录为网址的访问形式，且不用重启 koa 服务，即可热更新文件夹内部的文件代码，修改即上线。在开发接口时方便修改代码，和无感上线。
 

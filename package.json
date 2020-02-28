@@ -1,0 +1,16 @@
+{
+  "name": "koa-dir-router",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+    "clear-module": "^4.1.0",
+    "fs-extra": "^8.1.0"
+  }
+}

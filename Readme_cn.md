@@ -4,7 +4,7 @@
 
 一个 koa 的中间件，支持以文件夹目录为网址的访问形式，且不用重启 koa 服务，即可热更新文件夹内部的文件代码，修改即上线。在开发接口时方便修改代码，和无感上线。
 
-
+可以使用其他中间件或者自己定义页面混用，koa-dir-router 只有在`ctx.response.status === 404`时候起作用
 
 ## Installation
 
@@ -14,10 +14,12 @@ $ npm install koa-dir-router
 
 ## Options
 
-- `dir` 一个储存代码的文件目录的绝对路径，必须传递
-- `baseUrl` 请求的基准 url,默认是'/'
-- `checkTimes` 检测文件改动的时间，单位是 ms；默认是 1
-- `errorLog` 文件目录下的文件代码执行异常时的捕获的代码方法；接受到值是`{path,des,error}`
+- `dir` 一个储存代码的文件目录的绝对路径，必须传递 `[String]`
+- `baseUrl` 请求的基准 url,默认是'/' `[String]`
+- `checkTimes` 检测文件改动的时间，单位是 ms；默认是 1 `[Number]`
+- `errorLog` 文件目录下的文件代码执行异常时的捕获的代码方法；接受到值是`[Function]({path,des,error})`
+- `page404` 文件目录下的文件代码不存在时，回调的函数接受到值是`[Function](ctx)`
+- `debug` 是否显示调试信息；默认是 `true` 接受到值是`[Boolean]`
 
 ## Example
 

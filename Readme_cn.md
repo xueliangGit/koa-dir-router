@@ -63,7 +63,7 @@ $ GET /mis/type
 show-ok
 ```
 
-![showOK.png](https://raw.githubusercontent.com/xueliangGit/koa-dir-router/master/showOk.png)
+![showOK.png](https://static.bestsloth.top/showOk.png)
 
 如果需要一个基础的地址 `baseUrl`
 
@@ -92,13 +92,13 @@ $ GET /mis/mis/type
 show-ok
 ```
 
-![showOK2.png](https://raw.githubusercontent.com/xueliangGit/koa-dir-router/master/showOk2.png)
+![showOK2.png](https://static.bestsloth.top/showOk2.png)
 
 **代码出问题时？**
 
 如果在开发时代码出问题了，`koa-dir-router`会有一个友好的提示
 
-![showOK.png](https://raw.githubusercontent.com/xueliangGit/koa-dir-router/master/error.png)
+![error.png](https://static.bestsloth.top/error.png)
 
 若是线上代码，可以使用`errorLog`来获取。
 

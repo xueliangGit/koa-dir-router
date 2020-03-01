@@ -94,6 +94,14 @@ show-ok
 
 ![showOK2.png](https://raw.githubusercontent.com/xueliangGit/koa-dir-router/master/showOk2.png)
 
+**代码出问题时？**
+
+如果在开发时代码出问题了，`koa-dir-router`会有一个友好的提示
+
+![showOK.png](https://raw.githubusercontent.com/xueliangGit/koa-dir-router/master/error.png)
+
+若是线上代码，可以使用`errorLog`来获取。
+
 # License
 
 MIT

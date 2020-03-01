@@ -95,6 +95,14 @@ show-ok
 
 ![showOK2.png](https://raw.githubusercontent.com/xueliangGit/koa-dir-router/master/showOk2.png)
 
+**When something goes wrong with the code?**
+
+If there is something wrong with the code during development, 'koa dir router' will have a friendly prompt
+
+![showOK.png](https://raw.githubusercontent.com/xueliangGit/koa-dir-router/master/error.png)
+
+If it is online code, you can use 'errorlog' to get it.
+
 # License
 
 MIT

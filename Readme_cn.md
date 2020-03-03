@@ -21,7 +21,7 @@ $ npm install koa-dir-router
 - `page404` 文件目录下的文件代码不存在时，回调的函数接受到值是`[Function](ctx)`
 - `debug` 是否显示调试信息；默认是 `true` 接受到值是`[Boolean]`
 
-> 1.0.5 版本 废除`baseUrl` 参数名，使用`prefixUrl`来替代；
+> 1.0.7 版本 废除`baseUrl` 参数名，使用`prefixUrl`来替代；
 
 ## Example
 

@@ -21,7 +21,7 @@ $ npm install koa-dir-router
 - `page404` When the file code in the file directory does not exist, the callback function receives a value of `[function](ctx)`
 - `debug` Whether to display debugging information; the default value is `true` , the received value is `[Boolean]`
 
-> In version 1.0.5, the `baseurl` parameter name is abolished and replaced with `prefixurl`;
+> In version 1.0.7, the `baseurl` parameter name is abolished and replaced with `prefixurl`;
 
 ## Example
 

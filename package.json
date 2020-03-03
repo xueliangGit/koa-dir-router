@@ -15,7 +15,17 @@
     "type": "git",
     "url": "git+https://github.com/xueliangGit/koa-dir-router.git"
   },
-  "keywords": [],
+  "keywords": [
+    "koa",
+    "koa2",
+    "router",
+    "dir-router",
+    "dir",
+    "static-router",
+    "koa-dir-router",
+    "koa-static-router",
+    "koa-router"
+  ],
   "author": "",
   "license": "MIT",
   "bugs": {

@@ -15,11 +15,13 @@ $ npm install koa-dir-router
 ## Options
 
 - `dir` 一个储存代码的文件目录的绝对路径，必须传递 `[String]`
-- `baseUrl` 请求的基准 url,默认是'/' `[String]`
-- `checkTimes` 检测文件改动的时间，单位是 ms；默认是 1 `[Number]`
+- `prefixUrl` 请求路径的前缀,用来匹配本地文件默认是'/' `[String]`
+- `checkTimes` 检测文件改动的时间，单位是 ms；默认是 1000 `[Number]`
 - `errorLog` 文件目录下的文件代码执行异常时的捕获的代码方法；接受到值是`[Function]({path,des,error})`
 - `page404` 文件目录下的文件代码不存在时，回调的函数接受到值是`[Function](ctx)`
 - `debug` 是否显示调试信息；默认是 `true` 接受到值是`[Boolean]`
+
+> 1.0.5 版本 废除`baseUrl` 参数名，使用`prefixUrl`来替代；
 
 ## Example
 
@@ -65,7 +67,7 @@ show-ok
 
 ![showOK.png](https://static.bestsloth.top/showOk.png)
 
-如果需要一个基础的地址 `baseUrl`
+如果需要一个基础的地址 `prefixUrl`
 
 ```js
 // ./index.js
@@ -77,7 +79,7 @@ var app = new Koa()
 app.use(
   dirRouter({
     dir: path.join(__dirname, './controller'), // 传入要访问的目录机构
-    baseUrl: '/mis' // 基础地址
+    prefixUrl: '/mis' // 基础地址
   })
 )
 app.listen(3000)

@@ -2,16 +2,17 @@
  * @Author: xuxueliang
  * @Date: 2020-02-28 14:40:00
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-03-01 11:10:11
+ * @LastEditTime: 2020-03-03 16:29:33
  */
 const path = require('path')
-const fs = require('fs-extra')
+const fs = require('fs')
 const clearModule = require('clear-module')
 const version = require('./package.json').version
 /**
  * @method dirRouter
  * @param {String} dir 程序目录
  * @param {String} baseUrl 基准目录
+ * @param {String} prefixUrl 基准目录
  * @param {Number} checkTimes 检查间隔ms
  * @param {Boolean} debug 是否显示调试信息
  * @param {Functin} errorLog 异常捕获记录
@@ -20,8 +21,9 @@ const version = require('./package.json').version
  * */
 module.exports = ({
   dir = null, // 程序目录
-  baseUrl = '/',// 基准目录
-  checkTimes = 1,// 检查间隔
+  baseUrl = '',// 基准目录
+  prefixUrl = '/',// 基准目录
+  checkTimes = 1000,// 检查间隔
   debug = true,//是否显示调试信息
   errorLog = () => { },
   page404 = () => { }
@@ -29,7 +31,7 @@ module.exports = ({
   return async (ctx, next) => {
     await next()
     if (ctx.response.status === 404 && dir) {
-      let filePath = path.join(dir, getFilePath(ctx.request.url, baseUrl))
+      let filePath = path.join(dir, getFilePath(ctx.request.url, baseUrl || prefixUrl))
       let requirepath = path.relative(__dirname, filePath)
       try {
         let data = require(requirepath)
@@ -80,7 +82,7 @@ module.exports = ({
     }
   }
 }
-function getFilePath (url, baseUrl) {
-  baseUrl = baseUrl === '/' ? '' : baseUrl
-  return url.split('?')[0].substr(baseUrl.length)
+function getFilePath (url, prefixUrl) {
+  prefixUrl = prefixUrl === '/' ? '' : prefixUrl
+  return url.split('?')[0].substr(prefixUrl.length)
 }

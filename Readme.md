@@ -14,12 +14,14 @@ $ npm install koa-dir-router
 
 ## Options
 
-- `dir` The absolute path to the directory where the code is stored, must
-- `baseUrl` The reference URL of the request. The default is' / '
-- `checkTimes` Time to detect file changes, in MS; default is 1
-- `errorLog` Code method caught when the file code under the file directory executes an exception; the received value is `{path, DES, error}`
-- `page404` When the file code in the file directory does not exist, the callback function receives a value of `[function] (ctx)`
-- `debug` Whether to display debugging information; the default value is' true 'and the value is `[Boolean]`
+- `dir` The absolute path to the directory where the code is stored, must `[String]`
+- `prefixUrl` the prefix of the request path, which is used to match the local file. The default value is'/' `[String]`
+- `checkTimes` Time to detect file changes, in MS; default is `1000` `[Number]`
+- `errorLog` Code method caught when the file code under the file directory executes an exception; the received value is `[Function]({path,des,error})`
+- `page404` When the file code in the file directory does not exist, the callback function receives a value of `[function](ctx)`
+- `debug` Whether to display debugging information; the default value is `true` , the received value is `[Boolean]`
+
+> In version 1.0.5, the `baseurl` parameter name is abolished and replaced with `prefixurl`;
 
 ## Example
 
@@ -94,7 +96,7 @@ show-ok
 ```
 
 ![showOK2.png](https://static.bestsloth.top/showOk2.png)
-
+，
 **When something goes wrong with the code?**
 
 If there is something wrong with the code during development, 'koa dir router' will have a friendly prompt

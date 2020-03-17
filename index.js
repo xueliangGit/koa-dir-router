@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2020-02-28 14:40:00
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-03-03 16:29:33
+ * @LastEditTime: 2020-03-17 11:55:19
  */
 const path = require('path')
 const fs = require('fs')
@@ -50,7 +50,7 @@ module.exports = ({
           }
         }
         try {
-          data(ctx)
+          await data(ctx)
         } catch (e) {
           console.log('文件 【' + filePath + '】 执行有问题')
           console.log(e)
@@ -60,6 +60,7 @@ module.exports = ({
             error: e
           })
           if (debug) {
+            ctx.type = 'text/html;charset=utf-8'
             ctx.body = `<div><h3>【koa-dir-router】捕获的异常信息 </h3>`
             ctx.body += "<hr>"
             ctx.body += "错误名称: " + e.name + '<br>'

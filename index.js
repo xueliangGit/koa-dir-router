@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2020-02-28 14:40:00
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-03-17 11:55:19
+ * @LastEditTime: 2020-03-17 12:06:40
  */
 const path = require('path')
 const fs = require('fs')
@@ -73,6 +73,7 @@ module.exports = ({
         data = null
         mData = null
       } catch (e) {
+        ctx.body = `${ ctx.request.url }  链接不存在 `
         // if (ctx.app.env === 'development') {
         //   console.log(e)
         // }

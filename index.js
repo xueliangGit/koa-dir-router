@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2020-02-28 14:40:00
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-03-17 12:06:40
+ * @LastEditTime: 2020-03-23 16:08:07
  */
 const path = require('path')
 const fs = require('fs')
@@ -39,14 +39,15 @@ module.exports = ({
         if (!data._ckTime || Date.now() - data._ckTime >= checkTimes) {
           data._ckTime = Date.now()
           mData = fs.statSync(filePath + '.js')
+          const mtime = mData.mtime.toString()
           if (!data._mtime) {
-            data._mtime = mData.mtime
+            data._mtime = mtime
           }
-          if (data._mtime !== mData.mtime) {
+          if (data._mtime !== mtime) {
             clearModule(requirepath)
             data = require(requirepath)
             data._ckTime = Date.now()
-            data._mtime = mData.mtime
+            data._mtime = mtime
           }
         }
         try {

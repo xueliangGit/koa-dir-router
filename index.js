@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2020-02-28 14:40:00
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-03-23 16:08:07
+ * @LastEditTime: 2020-03-24 17:58:12
  */
 const path = require('path')
 const fs = require('fs')
@@ -17,6 +17,7 @@ const version = require('./package.json').version
  * @param {Boolean} debug 是否显示调试信息
  * @param {Functin} errorLog 异常捕获记录
  * @param {Functin} page404 404页面
+ * @param {Functin} context 函数调用的上下问对象 默认时global
  * @return {null} 
  * */
 module.exports = ({
@@ -26,6 +27,7 @@ module.exports = ({
   checkTimes = 1000,// 检查间隔
   debug = true,//是否显示调试信息
   errorLog = () => { },
+  context = global,
   page404 = () => { }
 } = {}) => {
   return async (ctx, next) => {
@@ -38,7 +40,12 @@ module.exports = ({
         let mData = null
         if (!data._ckTime || Date.now() - data._ckTime >= checkTimes) {
           data._ckTime = Date.now()
-          mData = fs.statSync(filePath + '.js')
+          let _filePath = filePath + '.js'
+          if (!fs.existsSync(_filePath)) {
+            _filePath = filePath + '/index.js'
+          }
+          console.log(_filePath)
+          mData = await fs.statSync(_filePath)
           const mtime = mData.mtime.toString()
           if (!data._mtime) {
             data._mtime = mtime
@@ -51,7 +58,7 @@ module.exports = ({
           }
         }
         try {
-          await data(ctx)
+          await data.call(context, ctx)
         } catch (e) {
           console.log('文件 【' + filePath + '】 执行有问题')
           console.log(e)
@@ -74,7 +81,11 @@ module.exports = ({
         data = null
         mData = null
       } catch (e) {
-        ctx.body = `${ ctx.request.url }  链接不存在 `
+        ctx.body = '\r'
+        if (e.toString().indexOf('no such file') > -1) {
+          ctx.body += `${ ctx.request.url }  链接不存 \r`
+        }
+        ctx.body += e
         // if (ctx.app.env === 'development') {
         //   console.log(e)
         // }

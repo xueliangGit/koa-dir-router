@@ -20,6 +20,7 @@ $ npm install koa-dir-router
 - `errorLog` 文件目录下的文件代码执行异常时的捕获的代码方法；接受到值是`[Function]({path,des,error})`
 - `page404` 文件目录下的文件代码不存在时，回调的函数接受到值是`[Function](ctx)`
 - `debug` 是否显示调试信息；默认是 `true` 接受到值是`[Boolean]`
+- `context` 执行业务函数时的上下文；默认是 `global` 接受到值是`[Object]`，方便把一些常用的方法放在上下文里，避免再次引入；
 
 > 1.0.7 版本 废除`baseUrl` 参数名，使用`prefixUrl`来替代；
 

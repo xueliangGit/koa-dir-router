@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2020-02-28 14:40:00
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-04-16 12:03:58
+ * @LastEditTime: 2020-04-16 16:50:33
  */
 const path = require('path')
 const fs = require('fs')
@@ -38,6 +38,7 @@ module.exports = ({
       let requirepath = path.relative(__dirname, filePath)
       try {
         let data = require(requirepath)
+
         let mData = null
         if (!data._ckTime || Date.now() - data._ckTime >= checkTimes) {
           data._ckTime = Date.now()
@@ -62,6 +63,7 @@ module.exports = ({
           if (typeof data === 'function') {
             await data.call(context, ctx)
           } else {
+
             handleError(new Error(filePath + '不是一个函数'), filePath, ctx)
           }
         } catch (e) {
@@ -70,7 +72,12 @@ module.exports = ({
         data = null
         mData = null
       } catch (e) {
-        handleError(e, filePath, ctx)
+
+        if (e.toString().indexOf('no such file')) {
+          ctx.body += `${ ctx.request.url }  链接不存 \r`
+        } else {
+          handleError(e, filePath, ctx)
+        }
         if (ctx.app.env === 'development') {
           console.log(e)
         }
@@ -89,18 +96,19 @@ function handleError (e, filePath, ctx) {
     des: '文件 【' + filePath + '】 执行有问题',
     error: e
   })
+  ctx.type = 'text/html;charset=utf-8'
   if (ctx.dirRouter.debug) {
-    ctx.type = 'text/html;charset=utf-8'
     ctx.body = `<div><h3>【koa-dir-router】捕获的异常信息 </h3>`
     ctx.body += "<hr>"
     ctx.body += "错误名称: " + e.name + '<br>'
     ctx.body += "<pre>错误信息: " + e.stack.replace(ctx.dirRouter.dir, '【koa-dir-router的工作目录下的】') + '</pre>'
     ctx.body += "<hr>"
     ctx.body += "<em style='font-size:12px;color:#999'>要想屏蔽该报错信息，需要设置【koa-dir-router】参数[debug]为[false] </em>"
-    ctx.body += `<h5 style="font-size:12px;text-align:left;color:#999">koa-dir-router@${ version }</h5></div>`
   } else {
     ctx.body = `${ ctx.request.url }  访问出错\r`
+    ctx.body += "<hr>"
   }
+  ctx.body += `<h5 style="font-size:16px;text-align:left;color:#999"><a target='_blank' href='https://www.npmjs.com/package/koa-dir-router'>koa-dir-router@${ version } 提供路由服务</a></h5></div>`
 }
 function getFilePath (url, prefixUrl) {
   prefixUrl = prefixUrl === '/' ? '' : prefixUrl

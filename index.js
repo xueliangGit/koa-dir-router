@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2020-02-28 14:40:00
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-03-24 17:58:12
+ * @LastEditTime: 2020-04-16 12:03:58
  */
 const path = require('path')
 const fs = require('fs')
@@ -32,6 +32,7 @@ module.exports = ({
 } = {}) => {
   return async (ctx, next) => {
     await next()
+    ctx.dirRouter = { debug, errorLog, dir }
     if (ctx.response.status === 404 && dir) {
       let filePath = path.join(dir, getFilePath(ctx.request.url, baseUrl || prefixUrl))
       let requirepath = path.relative(__dirname, filePath)
@@ -58,42 +59,47 @@ module.exports = ({
           }
         }
         try {
-          await data.call(context, ctx)
-        } catch (e) {
-          console.log('文件 【' + filePath + '】 执行有问题')
-          console.log(e)
-          errorLog({
-            path: filePath,
-            des: '文件 【' + filePath + '】 执行有问题',
-            error: e
-          })
-          if (debug) {
-            ctx.type = 'text/html;charset=utf-8'
-            ctx.body = `<div><h3>【koa-dir-router】捕获的异常信息 </h3>`
-            ctx.body += "<hr>"
-            ctx.body += "错误名称: " + e.name + '<br>'
-            ctx.body += "<pre>错误信息: " + e.stack.replace(dir, '【koa-dir-router的工作目录下的】') + '</pre>'
-            ctx.body += "<hr>"
-            ctx.body += "<em style='font-size:12px;color:#999'>要想屏蔽该报错信息，需要设置【koa-dir-router】参数[debug]为[false] </em>"
-            ctx.body += `<h5 style="font-size:12px;text-align:left;color:#999">koa-dir-router@${ version }</h5></div>`
+          if (typeof data === 'function') {
+            await data.call(context, ctx)
+          } else {
+            handleError(new Error(filePath + '不是一个函数'), filePath, ctx)
           }
+        } catch (e) {
+          handleError(e, filePath, ctx)
         }
         data = null
         mData = null
       } catch (e) {
-        ctx.body = '\r'
-        if (e.toString().indexOf('no such file') > -1) {
-          ctx.body += `${ ctx.request.url }  链接不存 \r`
+        handleError(e, filePath, ctx)
+        if (ctx.app.env === 'development') {
+          console.log(e)
         }
-        ctx.body += e
-        // if (ctx.app.env === 'development') {
-        //   console.log(e)
-        // }
         if (typeof page404 === 'function') {
           page404(ctx) // 404页面需要自定义
         }
       }
     }
+  }
+}
+function handleError (e, filePath, ctx) {
+  console.log('文件 【' + filePath + '】 执行有问题')
+  console.log(e)
+  typeof ctx.dirRouter.errorLog === 'function' && ctx.dirRouter.errorLog({
+    path: filePath,
+    des: '文件 【' + filePath + '】 执行有问题',
+    error: e
+  })
+  if (ctx.dirRouter.debug) {
+    ctx.type = 'text/html;charset=utf-8'
+    ctx.body = `<div><h3>【koa-dir-router】捕获的异常信息 </h3>`
+    ctx.body += "<hr>"
+    ctx.body += "错误名称: " + e.name + '<br>'
+    ctx.body += "<pre>错误信息: " + e.stack.replace(ctx.dirRouter.dir, '【koa-dir-router的工作目录下的】') + '</pre>'
+    ctx.body += "<hr>"
+    ctx.body += "<em style='font-size:12px;color:#999'>要想屏蔽该报错信息，需要设置【koa-dir-router】参数[debug]为[false] </em>"
+    ctx.body += `<h5 style="font-size:12px;text-align:left;color:#999">koa-dir-router@${ version }</h5></div>`
+  } else {
+    ctx.body = `${ ctx.request.url }  访问出错\r`
   }
 }
 function getFilePath (url, prefixUrl) {

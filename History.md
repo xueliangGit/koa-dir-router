@@ -1,3 +1,7 @@
+# 1.1.3 / 2020-04-16
+
+- 修复 bug，优化一场捕获
+
 # 1.0.7 / 2020-03-3
 
 - add prefixUrl,delete baseUrl

@@ -1,6 +1,6 @@
 {
   "name": "koa-dir-router",
-  "version": "1.1.0",
+  "version": "1.1.3",
   "description": "A middleware of KOA, which supports the access form of folder directory as web address, and does not need to restart the koa service, it can hot update the file code inside the folder, modify it and go online. It is convenient to modify the code and go online without feeling when developing the interface.",
   "main": "index.js",
   "dependencies": {

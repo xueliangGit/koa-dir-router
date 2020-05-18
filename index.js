@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2020-02-28 14:40:00
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-04-16 16:50:33
+ * @LastEditTime: 2020-04-16 18:02:10
  */
 const path = require('path')
 const fs = require('fs')
@@ -46,7 +46,6 @@ module.exports = ({
           if (!fs.existsSync(_filePath)) {
             _filePath = filePath + '/index.js'
           }
-          console.log(_filePath)
           mData = await fs.statSync(_filePath)
           const mtime = mData.mtime.toString()
           if (!data._mtime) {
@@ -90,7 +89,6 @@ module.exports = ({
 }
 function handleError (e, filePath, ctx) {
   console.log('文件 【' + filePath + '】 执行有问题')
-  console.log(e)
   typeof ctx.dirRouter.errorLog === 'function' && ctx.dirRouter.errorLog({
     path: filePath,
     des: '文件 【' + filePath + '】 执行有问题',

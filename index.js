@@ -2,12 +2,20 @@
  * @Author: xuxueliang
  * @Date: 2020-02-28 14:40:00
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-04-16 18:02:10
+ * @LastEditTime: 2020-07-22 12:51:40
  */
 const path = require('path')
 const fs = require('fs')
 const clearModule = require('clear-module')
 const version = require('./package.json').version
+
+const generateRunMethodsCall = (ctx) => {
+  return async (cb) => {
+    typeof cb === 'function' && cb(ctx)
+  }
+}
+
+const httpMethods = ['get', 'post', 'put', 'delete']
 /**
  * @method dirRouter
  * @param {String} dir 程序目录
@@ -16,6 +24,8 @@ const version = require('./package.json').version
  * @param {Number} checkTimes 检查间隔ms
  * @param {Boolean} debug 是否显示调试信息
  * @param {Functin} errorLog 异常捕获记录
+ * @param {String} acceptMethods 接受的方法 默认是* 所有方法都接受
+ * @param {Array} httpMethod 允许的http传输类型
  * @param {Functin} page404 404页面
  * @param {Functin} context 函数调用的上下问对象 默认时global
  * @return {null} 
@@ -28,11 +38,43 @@ module.exports = ({
   debug = true,//是否显示调试信息
   errorLog = () => { },
   context = global,
+  httpMethod = [],
+  acceptMethods = '*',
   page404 = () => { }
 } = {}) => {
   return async (ctx, next) => {
     await next()
-    ctx.dirRouter = { debug, errorLog, dir }
+    if (typeof acceptMethods === 'string') {
+      acceptMethods = acceptMethods.toLowerCase()
+    } else {
+      acceptMethods = '*'
+    }
+    const methods = ctx.request.method.toLowerCase()
+
+    if (acceptMethods.indexOf('*') < 0 && acceptMethods.indexOf(methods) < 0) {
+      debug && console.log(`路由设置只接受：【${ acceptMethods }】，不接受【${ methods }】`)
+      return
+    }
+    if (Array.isArray(httpMethod)) {
+      httpMethods.push(...httpMethod)
+    }
+    const dirRouterObj = {
+      debug, errorLog, dir,
+    }
+    ctx.dirRouter = new Proxy(dirRouterObj, {
+      get: function (target, key, receiver) {
+        if (key in target) {
+          return Reflect.get(target, key, receiver);
+        } else if (typeof key === 'string' && httpMethods.indexOf(key) > -1) {
+          if ((acceptMethods.indexOf('*') > -1 || acceptMethods.indexOf(key) > -1) && methods === key) {
+            return target[key] = generateRunMethodsCall(ctx)
+          } else {
+            return target[key] = () => { }
+          }
+        }
+        return undefined
+      }
+    })
     if (ctx.response.status === 404 && dir) {
       let filePath = path.join(dir, getFilePath(ctx.request.url, baseUrl || prefixUrl))
       let requirepath = path.relative(__dirname, filePath)

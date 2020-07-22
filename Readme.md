@@ -1,4 +1,4 @@
-# koa-dir-router
+# koa-dir-router[![NPM version](https://img.shields.io/npm/v/koa-dir-router.svg?style=flat)](https://npmjs.com/package/koa-dir-router)
 
 [中文文档](http://koadirrouter.yamjs.cn/Readme_cn)
 
@@ -20,6 +20,9 @@ $ npm install koa-dir-router
 - `errorLog` Code method caught when the file code under the file directory executes an exception; the received value is `[Function]({path,des,error})`
 - `page404` When the file code in the file directory does not exist, the callback function receives a value of `[function](ctx)`
 - `debug` Whether to display debugging information; the default value is `true` , the received value is `[Boolean]`
+  -The parameter `acceptmethods` `[string]` supports setting the accepted method. The default value is '\*', and the specification is' get, post '(1.1.6 +)
+
+-The parameter `httpmethod` `[array]` supports extended detection. The default method supported is`[get, post, put, delete]`(1.1.6 +)
 
 > In version 1.0.7, the `baseurl` parameter name is abolished and replaced with `prefixurl`;
 
@@ -39,7 +42,7 @@ directory structure
 
 ```js
 // ./controller/mis/type.js
-module.exports = function(ctx) {
+module.exports = function (ctx) {
   ctx.body = `show-ok`
 }
 // ./index.js
@@ -50,7 +53,7 @@ var app = new Koa()
 
 app.use(
   dirRouter({
-    dir: path.join(__dirname, './controller') // Incoming directory structure to access
+    dir: path.join(__dirname, './controller'), // Incoming directory structure to access
   })
 )
 app.listen(3000)
@@ -80,7 +83,7 @@ var app = new Koa()
 app.use(
   dirRouter({
     dir: path.join(__dirname, './controller'), // Incoming directory structure to access
-    baseUrl: '/mis' // base address
+    baseUrl: '/mis', // base address
   })
 )
 app.listen(3000)
@@ -104,6 +107,27 @@ If there is something wrong with the code during development, 'koa dir router' w
 ![error.png](https://static.bestsloth.top/error.png)
 
 If it is online code, you can use 'errorlog' to get it.
+
+## ** set the specified transmission mode (1.1.6 +)**
+
+Set the parameter `acceptmethods` to specify the program to work in a specific transmission mode
+
+## ** specify different execution method bodies for different request methods (1.1.6 +)**
+
+You can use it in the code file`ctx.dirRouter.MethodsName`Method to specify the code body that is not used in different ways. The value range of methodsname is the file code `httpmethod`, provided that the mode is allowed to enter the main program with `acceptmethods`;
+
+In this way, developers can quickly process the program in different ways
+
+```js
+module.exports = async function (ctx) {
+  await ctx.dirRouter.get((c) => {
+    console.log('run Get')
+  })
+  await ctx.dirRouter.post((c) => {
+    console.log('run POST')
+  })
+}
+```
 
 # License
 

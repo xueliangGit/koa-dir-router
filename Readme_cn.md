@@ -1,4 +1,4 @@
-# koa-dir-router
+# koa-dir-router[![NPM version](https://img.shields.io/npm/v/koa-dir-router.svg?style=flat)](https://npmjs.com/package/koa-dir-router)
 
 [english](http://koadirrouter.yamjs.cn)
 
@@ -21,6 +21,8 @@ $ npm install koa-dir-router
 - `page404` 文件目录下的文件代码不存在时，回调的函数接受到值是`[Function](ctx)`
 - `debug` 是否显示调试信息；默认是 `true` 接受到值是`[Boolean]`
 - `context` 执行业务函数时的上下文；默认是 `global` 接受到值是`[Object]`，方便把一些常用的方法放在上下文里，避免再次引入；
+- `acceptMethods` `[String]`参数，支持设定接受的方法 默认是 '\*' ，规范是 'get,post'(1.1.6+)
+- `httpMethod` `[Array]`参数，支持扩展检测支持的方法 默认是`[get,post,put,delete]`(1.1.6+)
 
 > 1.0.7 版本 废除`baseUrl` 参数名，使用`prefixUrl`来替代；
 
@@ -39,7 +41,7 @@ $ npm install koa-dir-router
 
 ```js
 // ./controller/mis/type.js 推荐接口写法一个文件一个接口；
-module.exports = function(ctx) {
+module.exports = function (ctx) {
   ctx.body = `show-ok`
 }
 // ./index.js
@@ -50,15 +52,13 @@ var app = new Koa()
 
 app.use(
   dirRouter({
-    dir: path.join(__dirname, './controller') // 传入要访问的目录机构
+    dir: path.join(__dirname, './controller'), // 传入要访问的目录机构
   })
 )
 app.listen(3000)
 ```
 
 访问 http://localhost:3000/mis/type 时会对应到对应的 文件目录下的 `./controller/mis/type.js`这个文件代码
-
-yields:
 
 ```js
 $ GET /mis/type
@@ -80,13 +80,14 @@ var app = new Koa()
 app.use(
   dirRouter({
     dir: path.join(__dirname, './controller'), // 传入要访问的目录机构
-    prefixUrl: '/mis' // 基础地址
+    prefixUrl: '/mis', // 基础地址
   })
 )
 app.listen(3000)
 ```
 
-访问 http://localhost:3000/mis/mis/type 时会对应到对应的 文件目录下的 `./controller/mis/type.js`这个文件代码
+访问 http://localhost:3000/mis/mis/type 时会对应到对应的 文件目录下的 `./controller/mis/type.js`
+
 yields:
 
 ```js
@@ -104,6 +105,29 @@ show-ok
 ![error.png](https://static.bestsloth.top/error.png)
 
 若是线上代码，可以使用`errorLog`来获取。
+
+## **设置指定的传输方式(1.1.6+)**
+
+通过设置参数`acceptMethods`来指定程序来在特定的传输方式下起作用
+
+## **针对不同的请求方法指定不同的执行方法体(1.1.6+)**
+
+在代码文件里可以使用一下 `ctx.dirRouter.MethodsName`方法来指定不同方式运行不用的代码体 MethodsName 可取值的范围是这个文件代码`httpMethod`，前提是和`acceptMethods` 允许该方式进入主程序；
+
+这样就方便开发者可以快速分方式去处理程序
+
+```js
+module.exports = async function (ctx) {
+  await ctx.dirRouter.get((c) => {
+    // 只会在get方式里执行
+    console.log('执行了Get')
+  })
+  await ctx.dirRouter.post((c) => {
+    // 只会在post方式里执行
+    console.log('执行了POST')
+  })
+}
+```
 
 # License
 
